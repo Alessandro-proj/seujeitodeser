@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f9f6ee">
+<meta name="description" content="Um teste de temperamentos em 32 frases para você se observar com carinho.">
+<title>Seu jeito de ser</title>
+<style>
+:root {
+  color-scheme: light;
+  --paper: #f9f6ee;
+  --copper: #8b4e35;
+  --ink: #24263a;
+  --muted: #605e70;
+  --line: #e1dacd;
+  --violet: #65459d;
+  --lilac: #e8def8;
+  --pink: #f8dce7;
+  --peach: #f8dfc9;
+  --green: #e0eadb;
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+button { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid var(--violet); outline-offset: 5px; }
+a { color: inherit; }
+.wrap { width: min(1120px, calc(100% - 72px)); margin: 0 auto; }
+.masthead { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: 11px; color: #322338; }
+.monogram {
+  position: relative;
+  display: grid;
+  place-content: center;
+  width: 43px;
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  border: 1px solid #b98264;
+  border-radius: 50%;
+  font: 400 20px/.7 var(--serif);
+  background: #fff9f2;
+  color: #70412e;
+}
+.monogram span { grid-area: 1 / 1; transform: translate(-17%, -19%); }
+.monogram span + span { color: #a36048; transform: translate(18%, 19%); }
+.brand-name { display: block; font: 400 1.27rem/1 var(--serif); letter-spacing: -.04em; white-space: nowrap; }
+.brand-role { display: block; margin-top: 5px; color: #755248; text-transform: uppercase; font-size: .57rem; font-weight: 650; letter-spacing: .18em; }
+.masthead small { color: var(--muted); font-size: .82rem; text-align: right; }
+body:has(.splash:not([hidden])) { overflow: hidden; }
+.splash {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  isolation: isolate;
+  padding: 23px;
+  background: radial-gradient(ellipse at 50% 45%, #493349 0%, #302333 50%, #211924 100%);
+  color: #fff3e8;
+  text-align: center;
+  animation: splash-exit 380ms ease-in 1290ms both;
+}
+.splash::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: clamp(12px, 3vw, 33px);
+  border: 1px solid #e3bda242;
+  border-radius: 20px;
+  pointer-events: none;
+}
+.splash-emblem {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(115px, 31vw, 151px);
+  aspect-ratio: 1;
+  margin-bottom: clamp(19px, 5vw, 28px);
+}
+.splash-emblem::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid #dab19958;
+  border-top-color: #edc1a7;
+  border-bottom-color: #edc1a7;
+  animation: splash-ring 1250ms cubic-bezier(.18,.62,.3,1) both;
+}
+.splash-emblem::after {
+  content: '✦';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  color: #f0bf9d;
+  font-size: 13px;
+  text-shadow: 0 0 12px #f9c19499;
+  animation: splash-arrive 670ms ease-out 210ms both;
+}
+.splash .monogram {
+  width: 76%;
+  border-color: #edc7ad90;
+  font-size: clamp(42px, 11vw, 56px);
+  color: #fff1e0;
+  background: #322435;
+  box-shadow: 0 0 34px #f3ad951f, inset 0 0 19px #f3ad9511;
+  animation: splash-arrive 690ms cubic-bezier(.2,.7,.25,1) both;
+}
+.splash .monogram span + span { color: #e8ae91; }
+.splash-wordmark { animation: splash-arrive 620ms cubic-bezier(.2,.7,.25,1) 140ms both; }
+.splash .brand-name { font-size: clamp(2.35rem, 9vw, 4.45rem); }
+.splash .brand-role { margin-top: 11px; color: #eabda7; font-size: .64rem; letter-spacing: .29em; }
+.splash-progress { width: min(105px, 42%); height: 2px; margin-top: 23px; overflow: hidden; border-radius: 4px; background: #e2bba936; }
+.splash-progress::before { content: ''; display: block; height: 100%; background: #ebba9c; transform-origin: left; animation: splash-progress 1130ms cubic-bezier(.23,.65,.28,1) 80ms both; }
+@keyframes splash-ring {
+  from { opacity: 0; transform: rotate(-135deg) scale(.8); }
+  to { opacity: 1; transform: rotate(0) scale(1); }
+}
+@keyframes splash-arrive {
+  from { opacity: 0; translate: 0 12px; }
+  to { opacity: 1; translate: 0 0; }
+}
+@keyframes splash-progress {
+  from { transform: scaleX(.04); }
+  to { transform: scaleX(1); }
+}
+@keyframes splash-exit {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+.hero { min-height: 510px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(28px, 5vw, 76px); padding: 50px 0 40px; border-bottom: 1px solid var(--line); }
+.note { display: inline-flex; align-items: center; gap: 9px; color: #64428d; font-weight: 700; font-size: .83rem; letter-spacing: .015em; }
+.note::before { content: ''; width: 21px; height: 1px; background: #9d7cba; }
+h1, h2, p { margin: 0; }
+h1[tabindex="-1"]:focus { outline: none; }
+.hero h1 { margin: 18px 0 23px; font: 400 clamp(4rem, 8.25vw, 7.65rem)/.89 var(--serif); letter-spacing: -.085em; }
+.hero h1 em { display: block; color: var(--violet); font-weight: 400; white-space: nowrap; letter-spacing: -.095em; }
+.hero p { max-width: 380px; color: var(--muted); font-size: 1.06rem; line-height: 1.68; }
+.start-line { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 20px; margin-top: 28px; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 13px; min-height: 53px; padding: 12px 22px; border: 1px solid transparent; border-radius: 100px; font-size: .92rem; font-weight: 700; cursor: pointer; transition: background .18s, transform .18s; }
+.button:hover { transform: translateY(-2px); }
+.primary { background: #292941; color: #fff; box-shadow: 0 5px 0 #d9cee9; }
+.primary:hover { background: #513977; }
+.secondary { background: transparent; border-color: #c9bed6; color: #3b3050; }
+.secondary:hover { background: #ebe3f5; }
+.hero .start-line small { font-size: .82rem; color: var(--muted); }
+.compass-stage { position: relative; min-width: 0; }
+.motion-toggle {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #6c4a955e;
+  border-radius: 50%;
+  background: #fbf6ff;
+  color: #593781;
+  cursor: pointer;
+  font-size: .85rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.motion-toggle:hover { background: #eee1fb; }
+.compass { min-width: 0; position: relative; display: grid; place-items: center; aspect-ratio: 1.12; margin: 0; overflow: hidden; isolation: isolate; border-radius: 26px; border: 1px solid #d7c9e9; background-color: #e9e0f5; background-image: radial-gradient(#a387bb33 .8px, transparent .9px), radial-gradient(ellipse at 52% 43%, #faf4fc 0%, #ecdef8 48%, #e2d3ef 100%); background-size: 9px 9px, 100% 100%; }
+.compass::before, .compass::after { content: ''; position: absolute; inset: 6%; border: 1px solid #9b83ae59; border-radius: 18px; pointer-events: none; }
+.compass::after { inset: 8%; border-style: dotted; opacity: .68; }
+.orbit { position: absolute; width: 60%; aspect-ratio: 1; border: 1px solid #a78cbba1; border-radius: 50%; }
+.orbit.inner { width: 46%; border-style: dashed; border-color: #a78cbbab; }
+.orbit-track { position: absolute; width: 66%; aspect-ratio: 1; border: 1px solid #ab8ec150; border-radius: 50%; }
+.orbit-track::before, .orbit-track::after { content: ''; position: absolute; top: 50%; left: 0; width: 8px; height: 8px; transform: translate(-50%, -50%); border-radius: 50%; background: #8863b2; box-shadow: 0 0 0 4px #a485c73a; }
+.orbit-track::after { left: 100%; width: 5px; height: 5px; background: #ae735f; box-shadow: 0 0 0 3px #c8937a40; }
+.axis { position: absolute; width: 77%; border-top: 1px solid #aa91ba6e; }
+.axis.vertical { transform: rotate(90deg); width: 68%; }
+.axis.diag-a { transform: rotate(45deg); width: 67%; border-color: #aa91ba55; }
+.axis.diag-b { transform: rotate(-45deg); width: 67%; border-color: #aa91ba55; }
+.rose { position: absolute; left: 50%; top: 50%; width: 45%; aspect-ratio: 1; transform: translate(-50%, -50%); background: #8c66bb; clip-path: polygon(50% 0,57% 38%,78% 22%,62% 43%,100% 50%,62% 57%,78% 78%,57% 62%,50% 100%,43% 62%,22% 78%,38% 57%,0 50%,38% 43%,22% 22%,43% 38%); }
+.rose::after { content: ''; position: absolute; inset: 0; background: #b495d5; clip-path: polygon(50% 0,50% 50%,100% 50%,57% 57%,50% 100%,50% 50%,0 50%,43% 43%); }
+.center { position: absolute; display: grid; place-items: center; width: 10%; aspect-ratio: 1; background: #fbf5ff; border: 1px solid #a17ebe; color: var(--violet); border-radius: 50%; font: 1.3rem var(--serif); box-shadow: 0 0 0 5px #eee1f6a8; }
+.star { position: absolute; font-size: clamp(.8rem, 2vw, 1.4rem); color: #7955a3; }
+.star.one { left: 15%; top: 18%; }
+.star.two { right: 15%; bottom: 14%; }
+.star.three { right: 18%; top: 16%; font-size: .8rem; }
+.star.four { left: 19%; bottom: 20%; font-size: .75rem; }
+.needle-label { position: absolute; display: flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 100px; border: 1px solid #4d365e29; font-size: clamp(.64rem, 1.24vw, .82rem); line-height: 1; font-weight: 700; box-shadow: 0 3px 8px #51366c12; }
+.north { top: 12%; left: 50%; transform: translateX(-50%) rotate(-5deg); background: var(--pink); }
+.east { right: 9%; top: 50%; transform: translateY(-50%) rotate(5deg); background: var(--peach); }
+.south { bottom: 12%; left: 50%; transform: translateX(-50%) rotate(-4deg); background: #f2e9fb; }
+.west { left: 9%; top: 50%; transform: translateY(-50%) rotate(-6deg); background: var(--green); }
+footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 9px 20px; padding: 20px 0 26px; color: var(--muted); font-size: .77rem; }
+footer a { text-underline-offset: 3px; }
+.flow { width: min(790px, 100%); margin: 0 auto; padding: 43px 0 35px; }
+.flow-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: .82rem; color: var(--muted); }
+.flow-top strong { color: var(--violet); }
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 10px; }
+.steps span { height: 5px; border-radius: 5px; background: #ebe0ed; }
+.steps .filled { background: #805bb4; }
+.flow h1, .finish h1 { font: 400 clamp(2.55rem, 5.8vw, 4.7rem)/1 var(--serif); letter-spacing: -.066em; margin: 25px 0 11px; }
+.flow p, .finish > p { color: var(--muted); line-height: 1.55; }
+.choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 24px 0; padding: 0; border: 0; min-width: 0; }
+.choice { display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 13px 15px; border-radius: 14px; border: 1px solid #ded6e5; background: #ffffff87; cursor: pointer; font-size: .92rem; line-height: 1.35; transition: border-color .18s, background .18s; }
+.choice:hover { border-color: #9e7dc3; }
+.choice:has(input:checked) { background: #ebdff8; border-color: #8d68b4; box-shadow: inset 3px 0 #9e76c5; }
+#count { display: inline-block; transform-origin: right center; }
+.choice input { width: 19px; height: 19px; margin: 0; flex: 0 0 19px; accent-color: var(--violet); cursor: pointer; }
+.actions { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.feedback { min-height: 1.5em; margin-top: 14px; font-size: .87rem; }
+#feedback { color: #8b344e; }
+.finish { width: min(690px, 100%); margin: 0 auto; padding: 43px 0 36px; }
+.finish h1 { margin-top: 14px; }
+.finish > p { max-width: 550px; }
+.finish .actions { align-items: stretch; flex-wrap: wrap; }
+.finish .actions a { text-decoration: none; }
+.sign-card { margin-top: 24px; padding: clamp(15px, 4vw, 26px); border: 1px solid #d9cce7; border-radius: 20px; background: #fffaf5; }
+.sign-card label, .signature-title { display: block; font-weight: 720; font-size: .94rem; }
+.name-field { width: 100%; min-height: 48px; margin: 8px 0 21px; padding: 10px 12px; border: 1px solid #c8b8d1; border-radius: 10px; background: #fff; color: var(--ink); font: inherit; }
+.signature-help { margin: 5px 0 9px; font-size: .82rem; color: var(--muted); }
+.signature-pad {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  outline: 1px dashed #ab8bb9;
+  outline-offset: -1px;
+  background: linear-gradient(to bottom, transparent 72%, #e7dbec 72%, #e7dbec calc(72% + 1px), transparent calc(72% + 1px)), #fff;
+  touch-action: none;
+  cursor: crosshair;
+}
+.clear-signature { min-height: 42px; margin: 5px 0 0; padding: 0 2px; border: 0; background: transparent; color: var(--violet); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.finish .feedback { color: #8b344e; margin: 0 0 15px; }
+.finish .feedback:empty { display: none; }
+.finish .actions { margin-top: 19px; }
+.delivery-card { padding: 18px 19px; margin-top: 21px; border: 1px solid #d9cce7; border-radius: 16px; background: #fffaf5; color: var(--muted); line-height: 1.55; }
+.delivery-card strong { display: block; margin-bottom: 5px; color: var(--ink); }
+#share-feedback { margin-top: 12px; color: var(--muted); }
+.edit-link { display: block; margin-top: 17px; padding: 8px 0; border: 0; background: transparent; color: var(--violet); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) {
+  .intro-motion .hero-copy > * { animation: intro-rise 560ms cubic-bezier(.2,.7,.25,1) both; }
+  .intro-motion .hero h1 { animation-delay: 65ms; }
+  .intro-motion .hero p { animation-delay: 135ms; }
+  .intro-motion .start-line { animation-delay: 205ms; }
+  .intro-motion .compass { animation: intro-rise 660ms cubic-bezier(.2,.7,.25,1) 100ms both; }
+  .intro-motion .rose { animation: compass-turn 940ms cubic-bezier(.17,.72,.23,1) 160ms both; }
+  .intro-motion .orbit-track { animation: orbit-spin 21s linear infinite; }
+  .intro-motion .orbit.inner { animation: orbit-spin 35s linear infinite reverse; }
+  .intro-motion .star { animation: compass-glow 3.6s ease-in-out infinite alternate; }
+  .intro-motion .star.two { animation-delay: -1.6s; }
+  .intro-motion .star.three { animation-delay: -.9s; }
+  .intro-motion .star.four { animation-delay: -2.3s; }
+  .compass-stage.motion-paused :is(.orbit, .orbit-track, .star) { animation-play-state: paused; }
+}
+@keyframes orbit-spin { to { transform: rotate(1turn); } }
+@keyframes intro-rise {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes compass-turn {
+  from { opacity: .4; transform: translate(-50%, -50%) rotate(-52deg) scale(.82); }
+  to { opacity: 1; transform: translate(-50%, -50%) rotate(0) scale(1); }
+}
+@keyframes compass-glow {
+  from { opacity: .42; transform: scale(.8); }
+  to { opacity: 1; transform: scale(1.13); }
+}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+@media (max-width: 760px) {
+  .wrap { width: calc(100% - 40px); }
+  .masthead { min-height: 69px; }
+  .brand { gap: 8px; }
+  .brand-name { font-size: 1.09rem; }
+  .monogram { width: 37px; font-size: 18px; }
+  .hero { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 24px; min-height: auto; }
+  .hero h1 { font-size: clamp(3.65rem, 13.3vw, 6.2rem); }
+  .compass-stage { width: 100%; max-width: 480px; justify-self: center; }
+  .needle-label { font-size: clamp(.65rem, 2.35vw, .83rem); }
+}
+@media (max-width: 520px) {
+  .masthead small { font-size: .72rem; }
+  .hero h1 { margin: 15px 0 18px; }
+  .hero p { font-size: 1rem; line-height: 1.55; }
+  .start-line { display: grid; gap: 10px; margin-top: 22px; text-align: center; }
+  .start-line .button { width: 100%; }
+  .choices { grid-template-columns: 1fr; }
+  .choice { min-height: 56px; }
+  .flow, .finish { padding-top: 25px; }
+  .button { padding-inline: 16px; }
+  .finish .actions .primary { flex: 1 1 auto; }
+  #delivery .actions { flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+  .motion-toggle { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="splash" id="splash" hidden>
+  <div class="splash-emblem" aria-hidden="true">
+    <span class="monogram"><span>N</span><span>N</span></span>
+  </div>
+  <div class="splash-wordmark">
+    <span class="brand-name">Natalia Nunes</span>
+    <span class="brand-role">Psicanalista</span>
+  </div>
+  <div class="splash-progress" aria-hidden="true"></div>
+  <p class="sr-only" role="status">Preparando seu teste</p>
+</div>
+<div class="wrap" id="page">
+  <header class="masthead">
+    <div class="brand">
+      <span class="monogram" aria-hidden="true"><span>N</span><span>N</span></span>
+      <span><span class="brand-name">Natalia Nunes</span><span class="brand-role">Psicanalista</span></span>
+    </div>
+    <small>Teste de temperamentos</small>
+  </header>
+
+  <main>
+    <section id="intro" aria-labelledby="intro-title">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="note">Um teste pra você, amiga</span>
+          <h1 id="intro-title" tabindex="-1">Seu jeito <em>de ser.</em></h1>
+          <p>Um convite pra perceber, com calma e curiosidade, como você reage, faz escolhas e se relaciona no dia a dia.</p>
+          <div class="start-line">
+            <button class="button primary" id="start" type="button">Começar meu teste <span aria-hidden="true">→</span></button>
+            <small>32 frases · cerca de 5 min</small>
+          </div>
+        </div>
+        <div class="compass-stage" id="compass-stage">
+          <figure class="compass" aria-label="Os quatro temperamentos: sanguíneo, colérico, melancólico e fleumático">
+            <span aria-hidden="true" class="axis"></span><span aria-hidden="true" class="axis vertical"></span>
+            <span aria-hidden="true" class="axis diag-a"></span><span aria-hidden="true" class="axis diag-b"></span>
+            <span aria-hidden="true" class="orbit"></span><span aria-hidden="true" class="orbit inner"></span>
+            <span aria-hidden="true" class="orbit-track"></span>
+            <span aria-hidden="true" class="rose"></span><span aria-hidden="true" class="center">✦</span>
+            <span aria-hidden="true" class="star one">✧</span><span aria-hidden="true" class="star two">✧</span>
+            <span aria-hidden="true" class="star three">✦</span><span aria-hidden="true" class="star four">✦</span>
+            <span aria-hidden="true" class="needle-label north">☀ Sanguíneo</span>
+            <span aria-hidden="true" class="needle-label east">✦ Colérico</span>
+            <span aria-hidden="true" class="needle-label south">☾ Melancólico</span>
+            <span aria-hidden="true" class="needle-label west">≈ Fleumático</span>
+          </figure>
+          <button class="motion-toggle" id="motion-toggle" type="button" aria-label="Pausar animação da bússola" title="Pausar animação da bússola"><span aria-hidden="true">Ⅱ</span></button>
+        </div>
+      </div>
+      <noscript><p>Ative o JavaScript do navegador para fazer o teste.</p></noscript>
+    </section>
+
+    <section class="flow" id="quiz" aria-labelledby="step-title" hidden>
+      <div class="flow-top"><strong id="step-label"></strong><span id="count" aria-live="polite"></span></div>
+      <div class="steps" id="steps" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <h1 id="step-title" tabindex="-1"></h1>
+      <p id="step-help">Marque as frases que descrevem como você costuma agir. Você pode deixar a rodada em branco.</p>
+      <fieldset class="choices" id="choices" aria-describedby="step-help"><legend class="sr-only">Frases desta rodada</legend></fieldset>
+      <div class="actions">
+        <button class="button secondary" type="button" id="back"><span aria-hidden="true">←</span> Voltar</button>
+        <button class="button primary" type="button" id="next"><span id="next-label">Continuar</span> <span aria-hidden="true">→</span></button>
+      </div>
+      <p class="feedback" id="feedback" role="alert"></p>
+    </section>
+
+    <section class="finish" id="identity" aria-labelledby="identity-title" hidden>
+      <span class="note">Última etapa</span>
+      <h1 id="identity-title" tabindex="-1">Seu nome e assinatura</h1>
+      <p id="identity-help">Assim a Natalia consegue identificar suas respostas.</p>
+      <form id="identity-form">
+        <div class="sign-card">
+          <label for="full-name">Nome completo</label>
+          <input class="name-field" id="full-name" name="nome" type="text" autocomplete="name" maxlength="100" required>
+          <p class="signature-title" id="signature-title">Assinatura</p>
+          <p class="signature-help" id="signature-help">Assine com o dedo ou com o mouse no espaço abaixo.</p>
+          <canvas class="signature-pad" id="signature" width="960" height="340" role="img" aria-labelledby="signature-title" aria-describedby="signature-help"></canvas>
+          <button class="clear-signature" id="clear-signature" type="button">Limpar assinatura</button>
+        </div>
+        <div class="actions">
+          <button class="button secondary" id="identity-back" type="button"><span aria-hidden="true">←</span> Voltar</button>
+          <button class="button primary" id="prepare" type="submit"><span id="prepare-label">Preparar envio</span> <span aria-hidden="true">→</span></button>
+        </div>
+        <p class="feedback" id="identity-feedback" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="finish" id="delivery" aria-labelledby="delivery-title" hidden>
+      <span class="note" id="delivery-note">Respostas assinadas</span>
+      <h1 id="delivery-title" tabindex="-1">Pronto pra enviar</h1>
+      <p id="delivery-description">Agora envie o arquivo para a Natalia pela conversa de vocês. Ela vai analisar suas respostas e retornar com a devolutiva em PDF.</p>
+      <div class="delivery-card">
+        <strong>Respostas do teste</strong>
+        O arquivo inclui seu nome, sua assinatura e as frases que você marcou.
+      </div>
+      <div class="actions">
+        <button class="button primary" id="share" type="button" hidden>Compartilhar respostas <span aria-hidden="true">↑</span></button>
+        <a class="button secondary" id="download" download="respostas-temperamentos.png">Baixar respostas</a>
+      </div>
+      <p class="feedback" id="share-feedback" role="status"></p>
+      <button class="edit-link" id="edit" type="button">Editar nome ou assinatura</button>
+    </section>
+  </main>
+
+  <footer><span>Feito com carinho ♡</span></footer>
+</div>
+
+<script type="application/json" id="question-data">
+[
+  {
+    "title": "Quando você está com outras pessoas",
+    "traits": [
+      [
+        "s",
+        "Puxo assunto mesmo quando ainda conheço pouca gente."
+      ],
+      [
+        "f",
+        "Costumo ouvir até a pessoa terminar antes de responder."
+      ],
+      [
+        "m",
+        "Prefiro conversas em que dá pra conhecer alguém de verdade."
+      ],
+      [
+        "c",
+        "Se ninguém toma a iniciativa no grupo, geralmente eu começo."
+      ],
+      [
+        "s",
+        "Faço uma brincadeira quando sinto que o clima ficou pesado."
+      ],
+      [
+        "m",
+        "Reparo em pequenas mudanças no jeito de alguém falar."
+      ],
+      [
+        "c",
+        "Digo o que penso de forma direta quando algo precisa ser resolvido."
+      ],
+      [
+        "f",
+        "Quando duas pessoas discordam, tento entender os dois lados."
+      ]
+    ]
+  },
+  {
+    "title": "No ritmo do dia a dia",
+    "traits": [
+      [
+        "m",
+        "Gosto de planejar os detalhes antes de começar."
+      ],
+      [
+        "s",
+        "Uma ideia nova costuma me empolgar mais que a rotina."
+      ],
+      [
+        "f",
+        "Me sinto mais à vontade mudando meus hábitos aos poucos."
+      ],
+      [
+        "c",
+        "Quando tenho uma meta, logo penso no primeiro passo."
+      ],
+      [
+        "m",
+        "Reviso meu trabalho até ficar satisfeita com o resultado."
+      ],
+      [
+        "c",
+        "Consigo tomar decisões mesmo quando o tempo é curto."
+      ],
+      [
+        "f",
+        "Prefiro terminar uma coisa antes de assumir outra."
+      ],
+      [
+        "s",
+        "Me animo quando aparece um convite de última hora."
+      ]
+    ]
+  },
+  {
+    "title": "Quando algo sai do plano",
+    "traits": [
+      [
+        "c",
+        "Procuro uma saída prática assim que surge um problema."
+      ],
+      [
+        "f",
+        "Em uma situação tensa, consigo esperar antes de reagir."
+      ],
+      [
+        "s",
+        "Às vezes respondo no impulso e só depois penso melhor."
+      ],
+      [
+        "m",
+        "Ensaio na cabeça o que vou dizer antes de uma conversa difícil."
+      ],
+      [
+        "f",
+        "Às vezes deixo passar algo que me incomodou pra evitar uma discussão."
+      ],
+      [
+        "c",
+        "Quando alguém desabafa, meu primeiro impulso é sugerir uma solução."
+      ],
+      [
+        "m",
+        "Volto a pensar numa decisão mesmo depois que ela já passou."
+      ],
+      [
+        "s",
+        "Meu entusiasmo inicial às vezes diminui antes de eu acabar o que comecei."
+      ]
+    ]
+  },
+  {
+    "title": "Nas suas escolhas e relações",
+    "traits": [
+      [
+        "f",
+        "Consigo ajudar nos bastidores sem precisar que me deem o crédito."
+      ],
+      [
+        "m",
+        "Gosto de entender por que algo funciona antes de decidir o que fazer."
+      ],
+      [
+        "c",
+        "Quando acho algo injusto, costumo tomar a frente e falar sobre isso."
+      ],
+      [
+        "s",
+        "Expresso minha alegria e meu carinho de um jeito espontâneo."
+      ],
+      [
+        "m",
+        "Quando quero caprichar muito, às vezes demoro a considerar algo pronto."
+      ],
+      [
+        "f",
+        "Em algumas situações, cedo mesmo quando tinha outra preferência."
+      ],
+      [
+        "s",
+        "Quando tenho uma boa notícia, fico com vontade de contar na hora."
+      ],
+      [
+        "c",
+        "Gosto de decidir por conta própria, mesmo que seja difícil pedir ajuda."
+      ]
+    ]
+  }
+]
+</script>
+<script>
+const splash = document.getElementById('splash');
+const page = document.getElementById('page');
+
+const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+if (!motionPreference.matches) {
+  const finishSplash = () => {
+    splash.hidden = true;
+    page.inert = false;
+    document.getElementById('intro').classList.add('intro-motion');
+  };
+  const fallback = window.setTimeout(finishSplash, 1850);
+  splash.addEventListener('animationend', event => {
+    if (event.animationName === 'splash-exit') {
+      window.clearTimeout(fallback);
+      finishSplash();
+    }
+  });
+  page.inert = true;
+  splash.hidden = false;
+} else {
+  document.getElementById('intro').classList.add('intro-motion');
+}
+
+const profiles = {
+  s: 'Sanguíneo',
+  c: 'Colérico',
+  m: 'Melancólico',
+  f: 'Fleumático'
+};
+
+const rounds = JSON.parse(document.getElementById('question-data').textContent);
+
+const get = id => document.getElementById(id);
+get('motion-toggle').addEventListener('click', event => {
+  const paused = get('compass-stage').classList.toggle('motion-paused');
+  const button = event.currentTarget;
+  const label = paused ? 'Retomar animação da bússola' : 'Pausar animação da bússola';
+  button.setAttribute('aria-label', label);
+  button.title = label;
+  button.firstElementChild.textContent = paused ? '▶' : 'Ⅱ';
+});
+const selected = new Set();
+let round = 0;
+
+function show(view, heading) {
+  for (const id of ['intro', 'quiz', 'identity', 'delivery']) get(id).hidden = id !== view;
+  get(heading).focus({ preventScroll: true });
+  window.scrollTo(0, 0);
+}
+
+function updateCount() {
+  const count = selected.size;
+  get('count').textContent = count + (count === 1 ? ' frase marcada' : ' frases marcadas');
+}
+
+function renderRound() {
+  const current = rounds[round];
+  get('step-label').textContent = 'Rodada ' + (round + 1) + ' de ' + rounds.length;
+  get('step-title').textContent = current.title;
+  get('feedback').textContent = '';
+  get('next-label').textContent = round === rounds.length - 1 ? 'Ir para assinatura' : 'Continuar';
+  [...get('steps').children].forEach((step, index) => step.classList.toggle('filled', index <= round));
+
+  const choices = get('choices');
+  choices.querySelectorAll('.choice').forEach(choice => choice.remove());
+  current.traits.forEach(([, text], index) => {
+    const key = round + '-' + index;
+    const label = document.createElement('label');
+    const input = document.createElement('input');
+    const caption = document.createElement('span');
+    label.className = 'choice';
+    input.type = 'checkbox';
+    input.checked = selected.has(key);
+    caption.textContent = text;
+    input.addEventListener('change', () => {
+      if (input.checked) selected.add(key);
+      else selected.delete(key);
+      get('feedback').textContent = '';
+      updateCount();
+      if (!motionPreference.matches) {
+        label.getAnimations().filter(animation => animation.id === 'choice-motion').forEach(animation => animation.cancel());
+        label.animate([
+          { transform: 'scale(1)' },
+          { transform: input.checked ? 'scale(1.027)' : 'scale(.978)', offset: .38 },
+          { transform: 'scale(1)' }
+        ], { id: 'choice-motion', duration: 320, easing: 'cubic-bezier(.2,.65,.3,1)' });
+        const count = get('count');
+        count.getAnimations().forEach(animation => animation.cancel());
+        count.animate([
+          { transform: 'scale(1.12)', color: '#65459d' },
+          { transform: 'scale(1)' }
+        ], { duration: 270, easing: 'ease-out' });
+      }
+    });
+    label.append(input, caption);
+    choices.append(label);
+  });
+  updateCount();
+  show('quiz', 'step-title');
+}
+
+const signature = get('signature');
+const ink = signature.getContext('2d');
+const strokes = [];
+let activePointer = null;
+let responseFile;
+let responseUrl;
+let submissionId;
+const servedOnline = location.protocol === 'http:' || location.protocol === 'https:';
+if (servedOnline) {
+  get('identity-help').textContent = 'Ao enviar, seu nome, suas respostas e sua assinatura ficam disponíveis para a Natalia no painel.';
+  get('prepare-label').textContent = 'Enviar respostas';
+}
+
+async function sendResponses(name) {
+  submissionId ??= crypto.randomUUID();
+  const response = await fetch('/api/responses', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      id: submissionId,
+      name,
+      selected: [...selected],
+      signature: signature.toDataURL('image/png')
+    })
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    const error = new Error(data.error);
+    error.safeToDisplay = true;
+    throw error;
+  }
+}
+
+ink.fillStyle = '#30263d';
+ink.strokeStyle = '#30263d';
+ink.lineWidth = 6;
+ink.lineCap = 'round';
+ink.lineJoin = 'round';
+
+function signaturePoint(event) {
+  const bounds = signature.getBoundingClientRect();
+  return {
+    x: Math.max(0, Math.min(signature.width, (event.clientX - bounds.left) * signature.width / bounds.width)),
+    y: Math.max(0, Math.min(signature.height, (event.clientY - bounds.top) * signature.height / bounds.height))
+  };
+}
+
+signature.addEventListener('pointerdown', event => {
+  if (activePointer !== null || event.button !== 0) return;
+  activePointer = event.pointerId;
+  signature.setPointerCapture(activePointer);
+  const point = signaturePoint(event);
+  strokes.push({ last: point, length: 0 });
+  ink.beginPath();
+  ink.arc(point.x, point.y, ink.lineWidth / 2, 0, 2 * Math.PI);
+  ink.fill();
+  get('identity-feedback').textContent = '';
+});
+
+signature.addEventListener('pointermove', event => {
+  if (event.pointerId !== activePointer) return;
+  const stroke = strokes.at(-1);
+  const point = signaturePoint(event);
+  ink.beginPath();
+  ink.moveTo(stroke.last.x, stroke.last.y);
+  ink.lineTo(point.x, point.y);
+  ink.stroke();
+  stroke.length += Math.hypot(point.x - stroke.last.x, point.y - stroke.last.y);
+  stroke.last = point;
+});
+
+signature.addEventListener('lostpointercapture', event => {
+  if (event.pointerId === activePointer) activePointer = null;
+});
+
+get('clear-signature').addEventListener('click', () => {
+  activePointer = null;
+  strokes.length = 0;
+  ink.clearRect(0, 0, signature.width, signature.height);
+  get('identity-feedback').textContent = '';
+});
+
+function createResponseImage(name) {
+  const image = document.createElement('canvas');
+  const context = image.getContext('2d');
+  const width = 900;
+  const margin = 54;
+  const textWidth = width - 2 * margin;
+  const lines = [];
+
+  function addLine(text, font, lineHeight, color, indent = 0) {
+    context.font = font;
+    let line = '';
+    for (const word of text.split(/\s+/)) {
+      const candidate = line ? line + ' ' + word : word;
+      if (line && context.measureText(candidate).width > textWidth - indent) {
+        lines.push({ text: line, font, lineHeight, color, indent });
+        line = word;
+      } else {
+        line = candidate;
+      }
+    }
+    lines.push({ text: line, font, lineHeight, color, indent });
+  }
+
+  const headingStyle = 'bold 23px system-ui, sans-serif';
+  const bodyStyle = '22px system-ui, sans-serif';
+  const inkColor = '#27243b';
+  const muted = '#574e5c';
+  const signedTraits = Object.fromEntries(Object.keys(profiles).map(key => [key, []]));
+  rounds.forEach(({ traits }, roundIndex) => {
+    traits.forEach(([key, text], index) => {
+      if (selected.has(roundIndex + '-' + index)) signedTraits[key].push(text);
+    });
+  });
+
+  addLine('Natalia Nunes · Psicanalista', headingStyle, 37, '#8b4e35');
+  addLine('Respostas do teste de temperamentos', 'bold 38px Georgia, serif', 60, inkColor);
+  addLine('Nome completo', headingStyle, 33, inkColor);
+  addLine(name, bodyStyle, 37, muted);
+
+  for (const [key, title] of Object.entries(profiles)) {
+    addLine(title, headingStyle, 42, '#63438b');
+    const traits = signedTraits[key];
+    if (traits.length === 0) {
+      addLine('Nenhuma frase marcada.', bodyStyle, 33, muted, 18);
+    } else {
+      for (const trait of traits) addLine('• ' + trait, bodyStyle, 33, muted, 18);
+    }
+  }
+
+  addLine('Assinatura', headingStyle, 46, inkColor);
+  const signatureWidth = Math.min(textWidth, 650);
+  const signatureHeight = signatureWidth * signature.height / signature.width;
+  image.width = width;
+  image.height = Math.ceil(2 * margin + signatureHeight + lines.reduce((height, line) => height + line.lineHeight, 0));
+  context.fillStyle = '#fffcf6';
+  context.fillRect(0, 0, image.width, image.height);
+  context.textBaseline = 'top';
+  let y = margin;
+  for (const line of lines) {
+    context.font = line.font;
+    context.fillStyle = line.color;
+    context.fillText(line.text, margin + line.indent, y, textWidth - line.indent);
+    y += line.lineHeight;
+  }
+  context.strokeStyle = '#cbb8cc';
+  context.strokeRect(margin, y, signatureWidth, signatureHeight);
+  context.drawImage(signature, margin, y, signatureWidth, signatureHeight);
+  return new Promise(resolve => image.toBlob(resolve, 'image/png'));
+}
+
+get('full-name').addEventListener('input', event => event.target.setCustomValidity(''));
+get('identity-form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const nameField = get('full-name');
+  const name = nameField.value.trim();
+  if (!name) {
+    nameField.setCustomValidity('Informe seu nome completo.');
+    nameField.reportValidity();
+    return;
+  }
+  if (!strokes.some(stroke => stroke.length > 20)) {
+    get('identity-feedback').textContent = 'Assine no espaço acima para preparar o envio.';
+    signature.scrollIntoView({ block: 'center' });
+    return;
+  }
+
+  const prepare = get('prepare');
+  const back = get('identity-back');
+  const label = get('prepare-label');
+  const originalLabel = label.textContent;
+  prepare.disabled = true;
+  back.disabled = true;
+  signature.style.pointerEvents = 'none';
+  get('clear-signature').disabled = true;
+  nameField.readOnly = true;
+  label.textContent = servedOnline ? 'Enviando…' : 'Preparando…';
+  get('identity-feedback').textContent = '';
+  try {
+    const image = await createResponseImage(name);
+    if (!image) throw new Error('Image export failed');
+    responseFile = new File([image], 'respostas-temperamentos.png', { type: image.type });
+    if (servedOnline) await sendResponses(name);
+    if (responseUrl) URL.revokeObjectURL(responseUrl);
+    responseUrl = URL.createObjectURL(responseFile);
+    const download = get('download');
+    download.href = responseUrl;
+    const canShare = !servedOnline && Boolean(navigator.canShare?.({ files: [responseFile] }));
+    get('share').hidden = !canShare;
+    download.classList.toggle('primary', !canShare);
+    download.classList.toggle('secondary', canShare);
+    if (servedOnline) {
+      get('delivery-note').textContent = 'Envio concluído';
+      get('delivery-title').textContent = 'Respostas enviadas';
+      get('delivery-description').textContent = 'A Natalia já pode acessar suas respostas pelo painel. Se quiser, baixe uma cópia do que você enviou.';
+      get('edit').hidden = true;
+      get('share-feedback').textContent = '';
+    } else {
+      get('share-feedback').textContent = canShare ? '' : 'Depois de baixar, anexe a imagem na conversa com a Natalia.';
+    }
+    show('delivery', 'delivery-title');
+  } catch (error) {
+    get('identity-feedback').textContent = error.safeToDisplay
+      ? error.message
+      : (servedOnline ? 'Não foi possível confirmar o envio. Tente novamente.' : 'Não foi possível preparar o arquivo. Tente novamente.');
+  } finally {
+    prepare.disabled = false;
+    back.disabled = false;
+    signature.style.pointerEvents = '';
+    get('clear-signature').disabled = false;
+    nameField.readOnly = false;
+    label.textContent = originalLabel;
+  }
+});
+
+get('share').addEventListener('click', async () => {
+  try {
+    await navigator.share({ files: [responseFile], title: 'Respostas do teste de temperamentos' });
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      get('share-feedback').textContent = 'Baixe o arquivo e anexe na conversa com a Natalia.';
+    }
+  }
+});
+
+get('start').addEventListener('click', renderRound);
+get('back').addEventListener('click', () => {
+  if (round === 0) show('intro', 'intro-title');
+  else {
+    round--;
+    renderRound();
+  }
+});
+get('next').addEventListener('click', () => {
+  if (round < rounds.length - 1) {
+    round++;
+    renderRound();
+  } else if (selected.size === 0) {
+    get('feedback').textContent = 'Marque pelo menos uma frase em qualquer rodada para continuar.';
+  } else {
+    show('identity', 'identity-title');
+  }
+});
+get('identity-back').addEventListener('click', renderRound);
+get('edit').addEventListener('click', () => show('identity', 'identity-title'));
+</script>
+</body>
+</html>
