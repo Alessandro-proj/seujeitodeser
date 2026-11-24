@@ -669,11 +669,20 @@ let activePointer = null;
 let responseFile;
 let responseUrl;
 let submissionId;
-const servedOnline = location.protocol === 'http:' || location.protocol === 'https:';
-if (servedOnline) {
-  get('identity-help').textContent = 'Ao enviar, seu nome, suas respostas e sua assinatura ficam disponíveis para a Natalia no painel.';
-  get('prepare-label').textContent = 'Enviar respostas';
-}
+const submissionMode = location.protocol === 'file:' ? Promise.resolve(false) : fetch('/api/status', {
+  cache: 'no-store',
+  signal: AbortSignal.timeout?.(2500)
+}).then(async response => {
+  if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) return false;
+  return (await response.json()).receivesResponses === true;
+}).catch(() => false);
+
+submissionMode.then(receivesResponses => {
+  if (receivesResponses) {
+    get('identity-help').textContent = 'Ao enviar, seu nome, suas respostas e sua assinatura ficam disponíveis para a Natalia no painel.';
+    get('prepare-label').textContent = 'Enviar respostas';
+  }
+});
 
 async function sendResponses(name) {
   submissionId ??= crypto.randomUUID();
@@ -833,12 +842,13 @@ get('identity-form').addEventListener('submit', async event => {
   const prepare = get('prepare');
   const back = get('identity-back');
   const label = get('prepare-label');
-  const originalLabel = label.textContent;
   prepare.disabled = true;
   back.disabled = true;
   signature.style.pointerEvents = 'none';
   get('clear-signature').disabled = true;
   nameField.readOnly = true;
+  const servedOnline = await submissionMode;
+  const originalLabel = label.textContent;
   label.textContent = servedOnline ? 'Enviando…' : 'Preparando…';
   get('identity-feedback').textContent = '';
   try {

@@ -2,6 +2,10 @@
 
 Teste de temperamentos da Natalia Nunes. A pessoa marca as frases com que se identifica, informa o nome e assina na tela. O painel reúne os envios para a Natalia consultar e preparar a devolutiva.
 
+## Demonstração no Vercel
+
+O Vercel publica a pasta `public` e abre o formulário em `/`. Nessa demonstração, a pessoa pode fazer o teste, assinar e baixar ou compartilhar a imagem das respostas. O painel e o SQLite funcionam pela demonstração local abaixo.
+
 ## Demonstração local
 
 Com Python 3.10 ou mais recente, execute este comando na raiz do repositório.
