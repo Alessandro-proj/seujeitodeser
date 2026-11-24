@@ -197,6 +197,19 @@ h1[tabindex="-1"]:focus { outline: none; }
 .east { right: 9%; top: 50%; transform: translateY(-50%) rotate(5deg); background: var(--peach); }
 .south { bottom: 12%; left: 50%; transform: translateX(-50%) rotate(-4deg); background: #f2e9fb; }
 .west { left: 9%; top: 50%; transform: translateY(-50%) rotate(-6deg); background: var(--green); }
+#book { position: relative; }
+#book.turning-page { pointer-events: none; background: var(--paper); backface-visibility: hidden; }
+.wrap:has(.turning-page) { overflow-x: clip; }
+.page-turn-shade {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  border-radius: 3px 12px 12px 3px;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #65436a78, transparent 17%, #fffaf5 70%, #b394ab88);
+}
+#book.turning-back .page-turn-shade { transform: scaleX(-1); }
 footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 9px 20px; padding: 20px 0 26px; color: var(--muted); font-size: .77rem; }
 footer a { text-underline-offset: 3px; }
 .flow { width: min(790px, 100%); margin: 0 auto; padding: 43px 0 35px; }
@@ -324,7 +337,7 @@ footer a { text-underline-offset: 3px; }
     <small>Teste de temperamentos</small>
   </header>
 
-  <main>
+  <main id="book">
     <section id="intro" aria-labelledby="intro-title">
       <div class="hero">
         <div class="hero-copy">
@@ -410,6 +423,7 @@ footer a { text-underline-offset: 3px; }
       <p class="feedback" id="share-feedback" role="status"></p>
       <button class="edit-link" id="edit" type="button">Editar nome ou assinatura</button>
     </section>
+    <div class="page-turn-shade" id="page-turn-shade" aria-hidden="true"></div>
   </main>
 
   <footer><span>Feito com carinho ♡</span></footer>
@@ -612,6 +626,58 @@ get('motion-toggle').addEventListener('click', event => {
 });
 const selected = new Set();
 let round = 0;
+let turningPage = false;
+
+async function turnPage(change, backwards = false) {
+  if (turningPage) return;
+  const book = get('book');
+  if (motionPreference.matches || typeof book.animate !== 'function') {
+    change();
+    return;
+  }
+
+  const shade = get('page-turn-shade');
+  const direction = backwards ? 1 : -1;
+  const transformOrigin = backwards ? 'right center' : 'left center';
+  const facing = 'perspective(1200px) rotateY(0deg)';
+  turningPage = true;
+  book.classList.add('turning-page');
+  book.classList.toggle('turning-back', backwards);
+
+  async function animateLeaf(from, to, duration, easing) {
+    const leaf = book.animate([
+      { transform: from.transform, opacity: from.opacity, transformOrigin },
+      { transform: to.transform, opacity: to.opacity, transformOrigin }
+    ], { duration, easing, fill: 'both' });
+    const shadow = shade.animate([
+      { opacity: from.shade },
+      { opacity: to.shade }
+    ], { duration, easing, fill: 'both' });
+    try {
+      await leaf.finished;
+    } finally {
+      leaf.cancel();
+      shadow.cancel();
+    }
+  }
+
+  try {
+    await animateLeaf(
+      { transform: facing, opacity: 1, shade: 0 },
+      { transform: 'perspective(1200px) rotateY(' + (direction * 72) + 'deg)', opacity: .22, shade: .76 },
+      240, 'cubic-bezier(.4,.04,.69,.47)'
+    );
+    change();
+    await animateLeaf(
+      { transform: 'perspective(1200px) rotateY(' + (-direction * 24) + 'deg)', opacity: .65, shade: .52 },
+      { transform: facing, opacity: 1, shade: 0 },
+      290, 'cubic-bezier(.16,.71,.24,1)'
+    );
+  } finally {
+    book.classList.remove('turning-page', 'turning-back');
+    turningPage = false;
+  }
+}
 
 function show(view, heading) {
   for (const id of ['intro', 'quiz', 'identity', 'delivery']) get(id).hidden = id !== view;
@@ -834,6 +900,7 @@ function createResponseImage(name) {
 get('full-name').addEventListener('input', event => event.target.setCustomValidity(''));
 get('identity-form').addEventListener('submit', async event => {
   event.preventDefault();
+  if (turningPage || get('prepare').disabled) return;
   const nameField = get('full-name');
   const name = nameField.value.trim();
   if (!name) {
@@ -881,7 +948,7 @@ get('identity-form').addEventListener('submit', async event => {
     } else {
       get('share-feedback').textContent = canShare ? '' : 'Depois de baixar, anexe a imagem na conversa com a Natalia.';
     }
-    show('delivery', 'delivery-title');
+    await turnPage(() => show('delivery', 'delivery-title'));
   } catch (error) {
     get('identity-feedback').textContent = error.safeToDisplay
       ? error.message
@@ -906,26 +973,29 @@ get('share').addEventListener('click', async () => {
   }
 });
 
-get('start').addEventListener('click', renderRound);
-get('back').addEventListener('click', () => {
+get('start').addEventListener('click', () => turnPage(renderRound));
+get('back').addEventListener('click', () => turnPage(() => {
   if (round === 0) show('intro', 'intro-title');
   else {
     round--;
     renderRound();
   }
-});
+}, true));
 get('next').addEventListener('click', () => {
+  if (turningPage) return;
   if (round < rounds.length - 1) {
-    round++;
-    renderRound();
+    turnPage(() => {
+      round++;
+      renderRound();
+    });
   } else if (selected.size === 0) {
     get('feedback').textContent = 'Marque pelo menos uma frase em qualquer rodada para continuar.';
   } else {
-    show('identity', 'identity-title');
+    turnPage(() => show('identity', 'identity-title'));
   }
 });
-get('identity-back').addEventListener('click', renderRound);
-get('edit').addEventListener('click', () => show('identity', 'identity-title'));
+get('identity-back').addEventListener('click', () => turnPage(renderRound, true));
+get('edit').addEventListener('click', () => turnPage(() => show('identity', 'identity-title'), true));
 </script>
 </body>
 </html>
