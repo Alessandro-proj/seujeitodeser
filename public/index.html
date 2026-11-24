@@ -141,7 +141,10 @@ h1, h2, p { margin: 0; }
 h1[tabindex="-1"]:focus { outline: none; }
 .hero h1 { margin: 18px 0 23px; font: 400 clamp(4rem, 8.25vw, 7.65rem)/.89 var(--serif); letter-spacing: -.085em; }
 .hero h1 em { display: block; color: var(--violet); font-weight: 400; white-space: nowrap; letter-spacing: -.095em; }
-.hero p { max-width: 380px; color: var(--muted); font-size: 1.06rem; line-height: 1.68; }
+.intro-description { max-width: 465px; }
+.intro-description h2 { margin-bottom: 9px; font-size: 1rem; font-weight: 720; }
+.intro-description p { color: var(--muted); font-size: .97rem; line-height: 1.6; }
+.intro-description p + p { margin-top: 10px; }
 .start-line { display: flex; align-items: center; flex-wrap: wrap; gap: 14px 20px; margin-top: 28px; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 13px; min-height: 53px; padding: 12px 22px; border: 1px solid transparent; border-radius: 100px; font-size: .92rem; font-weight: 700; cursor: pointer; transition: background .18s, transform .18s; }
 .button:hover { transform: translateY(-2px); }
@@ -244,7 +247,7 @@ footer a { text-underline-offset: 3px; }
 @media (prefers-reduced-motion: no-preference) {
   .intro-motion .hero-copy > * { animation: intro-rise 560ms cubic-bezier(.2,.7,.25,1) both; }
   .intro-motion .hero h1 { animation-delay: 65ms; }
-  .intro-motion .hero p { animation-delay: 135ms; }
+  .intro-motion .intro-description { animation-delay: 135ms; }
   .intro-motion .start-line { animation-delay: 205ms; }
   .intro-motion .compass { animation: intro-rise 660ms cubic-bezier(.2,.7,.25,1) 100ms both; }
   .intro-motion .rose { animation: compass-turn 940ms cubic-bezier(.17,.72,.23,1) 160ms both; }
@@ -284,7 +287,7 @@ footer a { text-underline-offset: 3px; }
 @media (max-width: 520px) {
   .masthead small { font-size: .72rem; }
   .hero h1 { margin: 15px 0 18px; }
-  .hero p { font-size: 1rem; line-height: 1.55; }
+  .intro-description p { font-size: .93rem; line-height: 1.53; }
   .start-line { display: grid; gap: 10px; margin-top: 22px; text-align: center; }
   .start-line .button { width: 100%; }
   .choices { grid-template-columns: 1fr; }
@@ -327,7 +330,12 @@ footer a { text-underline-offset: 3px; }
         <div class="hero-copy">
           <span class="note">Um teste pra você, amiga</span>
           <h1 id="intro-title" tabindex="-1">Seu jeito <em>de ser.</em></h1>
-          <p>Um convite pra perceber, com calma e curiosidade, como você reage, faz escolhas e se relaciona no dia a dia.</p>
+          <div class="intro-description">
+            <h2>Teste de Temperamento</h2>
+            <p>Marque características que você acha que tem em sua personalidade. Seja sincero, para que o resultado seja realmente exato, e você possa se conhecer melhor.</p>
+            <p>De preferência, faça em um local tranquilo, onde você possa se examinar com calma e cautela.</p>
+            <p>Não tem respostas certas ou aceitáveis. Lembre-se: Você está aqui para conhecer a si mesmo, então retire todo filtro.</p>
+          </div>
           <div class="start-line">
             <button class="button primary" id="start" type="button">Começar meu teste <span aria-hidden="true">→</span></button>
             <small>32 frases · cerca de 5 min</small>
